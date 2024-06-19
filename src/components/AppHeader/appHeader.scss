@@ -1,0 +1,18 @@
+@import "../../variables.scss";
+
+.MuiAppBar-root {
+    background-color: $dark-primary-color !important;
+
+    .same-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .App-logo {
+        height: 5vmin;
+        padding-right: 5px;
+    }
+    .cursor-pointer {
+        cursor: pointer;
+    }
+}

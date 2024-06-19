@@ -1,0 +1,27 @@
+@import "./variables.scss";
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  pointer-events: none;
+}
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: $secondary-color;
+}
+
+::-moz-selection {
+  color: $light-primary-color;
+  background: $dark-primary-color;
+}
+
+::selection {
+  background: $light-primary-color;
+  color: $dark-primary-color;
+}
