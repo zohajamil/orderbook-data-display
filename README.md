@@ -1,8 +1,8 @@
 # Crypto OrderBook Data Display App
 
-A web application used to visualize the real time prices of order book data of popular cryptocurrency pairs i.e. BTC-USD, ETH-USD, LTC-USD, BCH-USD.\
+A web application used to visualize the real time prices of order book data of popular cryptocurrency pairs i.e. BTC-USD, ETH-USD, LTC-USD, BCH-USD.
 
-Other functionalities are as follows:\
+Other functionalities are as follows:
 - User can toggle between the ladder and chart view in order to visual data. 
 - Dropdown is provided at the top right corner to select any currencypair to visualize. The current best bid and ask is also displayed on the top.
 ## Technologies used
@@ -56,7 +56,7 @@ For indication of loading while the real time data is being fetched.
 ## APIs used
 
 [Coinbase api](https://docs.cloud.coinbase.com/exchange/docs/websocket-channels#level2-channel) is used as it didn't require API Keys or secret to fetch data as well. API used:
-- **Level2 Batch API:** To get real time bids and asks updates for crypto. The initial response of the api id snapshot which consists of the price and size pairs. Whereas after that, level2update type of data is returned includeing the bids and asks data each second.
+- **Level2 Batch API:** To get real time bids and asks updates for crypto. The initial response of the api is snapshot data which consists of the price and size pairs. Whereas after that, level2update type of data is returned including the bids and asks data each second.
 
 ## Other References
 ### Icons
