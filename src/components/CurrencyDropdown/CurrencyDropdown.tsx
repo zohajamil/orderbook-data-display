@@ -1,21 +1,29 @@
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
+import './currencyDropdown.scss';
+import { CurrencyDropdownProps } from '../../common/interfaces/CurrencyDropdownProps';
+import { currencyPairs } from '../../common/CurrencyPairs';
 
-interface CurrencyDropdownProps {
-    selectedPair: string;
-    onPairChange: (pair: string) => void;
-}
-
-const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({ selectedPair, onPairChange }) => {
-    const pairs = ['BTC-USD', 'ETH-USD', 'LTC-USD', 'BCH-USD'];
-
+const CurrencyDropdown: React.FC<CurrencyDropdownProps> = (props: CurrencyDropdownProps) => {
     return (
-        <select value={selectedPair} onChange={(e) => onPairChange(e.target.value)}>
-            {pairs.map((pair) => (
-                <option key={pair} value={pair}>
-                    {pair}
-                </option>
-            ))}
-        </select>
+        <div className='currency-dropdown-wrapper'>
+            <FormControl className='right-aligned'>
+                <InputLabel id="currency-pair-select-label">Currency Pair</InputLabel>
+                <Select
+                    labelId="currency-pair-select-label"
+                    id="currency-pair-select"
+                    value={props.selectedPair}
+                    label="Currency Pair"
+                    onChange={(e) => props.onPairChange(e.target.value)}
+                >
+                    {currencyPairs.map((pair) => (
+                        <MenuItem key={pair} value={pair}>
+                            {pair}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </div>
     );
 };
 

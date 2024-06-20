@@ -1,0 +1,11 @@
+.currency-dropdown-wrapper  {
+    display: flex;
+    justify-content: flex-end;
+    .right-aligned {
+        margin-top: 20px;
+        margin-right: 20px;
+        max-width: 250px;
+        min-width: 250px;
+    }
+
+}

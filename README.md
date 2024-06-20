@@ -1,30 +1,63 @@
-# React + TypeScript + Vite
+# Crypto OrderBook Data Display App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application used to visualize the real time prices of order book data of popular cryptocurrency pairs i.e. BTC-USD, ETH-USD, LTC-USD, BCH-USD.\
 
-Currently, two official plugins are available:
+Other functionalities are as follows:\
+- User can toggle between the ladder and chart view in order to visual data. 
+- Dropdown is provided at the top right corner to select any currencypair to visualize. The current best bid and ask is also displayed on the top.
+## Technologies used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React, Typescript, Vite, Web Sockets
+## Available Scripts
 
-## Expanding the ESLint configuration
+In the project directory, you can run:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### `npm run dev`
 
-- Configure the top-level `parserOptions` property like this:
+Runs the app in the development mode.\
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### `npm run build`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+For building the app
+
+## Important Packages Used and their explanation
+
+### MUI
+Easy to use UI components & icons with customization possible.
+
+### React chart js 2
+Widely used library for charts in React. Displayed data for bids and asks on a Line Graph
+
+
+### react-loading-dot
+For indication of loading while the real time data is being fetched.
+
+
+## Assumptions & Information
+- The real-time current best bids and ask value is displayed adjusted to 8 decimal places. 
+
+- Bid and ask data displayed is for past 1 hour with 15 seconds intervals.
+
+- The UI is divided into logical components and the folder is made as such that the relavant files are grouped so it is easy to understand.
+
+- Have added basic theme colors in _variables.scss so that if the theme colors have to be changed, we can change it at one place only. Similarly for use of colors in tsx components the theme colors are added as enum in the common folder.
+
+- scss files are used & container class for the specific component is wrapped for that component's scss so that the components styling are not mixed.
+
+- Favicon and title are updated according to the app as well.
+
+### Folder Structure
+- `common` folder consists of the common information i.e. the data, interfaces, constants & enums.
+- `components` folder contains all the components.
+- `assets` folder consists of all the images used. In this case, app logo.
+- `src` folder has all the global files & configs.
+
+## APIs used
+
+[Coinbase api](https://docs.cloud.coinbase.com/exchange/docs/websocket-channels#level2-channel) is used as it didn't require API Keys or secret to fetch data as well. API used:
+- **Level2 Batch API:** To get real time bids and asks updates for crypto. The initial response of the api id snapshot which consists of the price and size pairs. Whereas after that, level2update type of data is returned includeing the bids and asks data each second.
+
+## Other References
+### Icons
+The icons used in this project are downloaded from [https://logowik.com/](https://logowik.com/)

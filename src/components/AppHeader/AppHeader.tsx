@@ -1,6 +1,6 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import logo from '../../images/bookLogo.png';
+import logo from '../../assets/bookLogo.png';
 import './appHeader.scss'
 
 const AppHeader = () => {

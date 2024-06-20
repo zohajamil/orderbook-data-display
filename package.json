@@ -16,7 +16,7 @@
     "@mui/material": "^5.15.20",
     "apexcharts": "^3.49.1",
     "axios": "^1.7.2",
-    "dayjs": "^1.11.11",
+    "hashmap": "^2.4.0",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
@@ -25,6 +25,7 @@
     "react-loading-dot": "^1.0.6"
   },
   "devDependencies": {
+    "@types/hashmap": "^2.3.4",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

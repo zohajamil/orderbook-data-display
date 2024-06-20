@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react';
+import { OrderWithTimestamp } from '../common/interfaces/OrderWithTimestamp';
 
-interface Order {
-    price: number;
-    size: number;
-}
-
-interface OrderWithTimestamp extends Order {
-    timestamp: number;
-}
 
 interface Level2Update {
-    changes: [string, string, string][];
+    changes: [string, string, string][]; // side(buy/sell) , price, size
 }
 
 interface Level2Snapshot {
-    bids: [string, string][];
+    bids: [string, string][]; // price, size
     asks: [string, string][];
 }
 
@@ -32,11 +25,13 @@ const useWebSocket = (pair: string) => {
         };
 
         const handleLevel2Update = (data: Level2Update) => {
+            // console.log(data)
             const timestamp = Date.now();
             data.changes.forEach(([side, price, size]) => {
                 const parsedPrice = parseFloat(price);
                 const parsedSize = parseFloat(size);
 
+                // if side is buy then its a bid.
                 if (side === 'buy') {
                     setBids((prevBids) => {
                         const updatedBids = prevBids.filter(order => order.price !== parsedPrice);
@@ -45,7 +40,9 @@ const useWebSocket = (pair: string) => {
                         }
                         return updatedBids.sort((a, b) => b.price - a.price);
                     });
-                } else {
+                } 
+                // if side is sell, it is ask
+                else {
                     setAsks((prevAsks) => {
                         const updatedAsks = prevAsks.filter(order => order.price !== parsedPrice);
                         if (parsedSize > 0) {
@@ -61,17 +58,19 @@ const useWebSocket = (pair: string) => {
             ws.send(JSON.stringify({
                 type: "subscribe",
                 channels: [
-                    { name: "level2_batch", product_ids: [pair] },
-                    { name: "ticker", product_ids: [pair] }
+                    { name: "level2_batch", product_ids: [pair] }, // using level2_batch as it didn't require authentication
                 ]
             }));
         };
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
+            // first response is snapshot
             if (message.type === "snapshot") {
                 handleLevel2Snapshot(message);
-            } else if (message.type === "l2update") {
+            } 
+            // after snapshot all responses are l2update
+            else if (message.type === "l2update") {
                 handleLevel2Update(message);
             }
         };

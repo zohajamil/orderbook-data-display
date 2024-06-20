@@ -1,74 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import ScrollableWidgets from '../ScrollableWidget/ScrollableWidget';
+import { LadderViewProps } from '../../common/interfaces/LadderViewProps';
+import { OrderWithTimestamp } from '../../common/interfaces/OrderWithTimestamp';
 
-interface Order {
-    price: number;
-    size: number;
-}
 
-interface LadderViewProps {
-    bids: Order[];
-    asks: Order[];
-    increment: number;
-}
+const LadderView: React.FC<LadderViewProps> = (props: LadderViewProps) => {
+  const fifteenMinutes = 15 * 1000; // 15 minutes in milliseconds (keep ladderview data of last 15 mins only)
+  const [displayedBids, setDisplayedBids] = useState<OrderWithTimestamp[]>([]);
+  const [displayedAsks, setDisplayedAsks] = useState<OrderWithTimestamp[]>([]);
 
-const aggregateOrders = (orders: Order[], increment: number) => {
-    const aggregated: { [key: string]: number } = {};
+  const updateDisplayedData = useCallback(() => {
+    const now = Date.now();
 
-    orders.forEach(({ price, size }) => {
-        const roundedPrice = (Math.floor(price / increment) * increment).toFixed(2);
-        if (!aggregated[roundedPrice]) {
-            aggregated[roundedPrice] = 0;
-        }
-        aggregated[roundedPrice] += size;
-    });
+    const filterData = (orders: OrderWithTimestamp[]) => {
+      return orders.filter(order => order.timestamp >= now - fifteenMinutes); // filtering data for last 15 mins only
+    };
 
-    return Object.entries(aggregated).map(([price, size]) => ({ price: parseFloat(price), size }));
+    setDisplayedBids(filterData(props.bids));
+    setDisplayedAsks(filterData(props.asks));
+  }, [props.bids, props.asks, fifteenMinutes]);
+
+  useEffect(() => {
+    const interval = setInterval(updateDisplayedData, 15000); // Update every 15 seconds so that the data is not rendered repeatedly
+
+    // Initial update
+    updateDisplayedData();
+
+    return () => clearInterval(interval);
+  }, [updateDisplayedData])
+
+  const sortedBids = useMemo(() => {
+    return displayedBids.sort((a, b) => b.price - a.price);
+  }, [displayedBids])
+
+  const sortedAsks = useMemo(() => {
+    return displayedAsks.sort((a, b) => a.price - b.price);
+  }, [displayedAsks])
+
+  return (
+    <div className="ladder-view">
+      {/* Display the ladder view data in scrollable widgets so that the height of screen is not repeatedly changed */}
+      <ScrollableWidgets aggregatedAsks={sortedAsks} aggregatedBids={sortedBids} />
+    </div>
+  );
 };
 
-const LadderView: React.FC<LadderViewProps> = ({ bids, asks, increment }) => {
-    const [aggregationIncrement, setAggregationIncrement] = useState(increment);
-
-    const aggregatedBids = aggregateOrders(bids, aggregationIncrement);
-    const aggregatedAsks = aggregateOrders(asks, aggregationIncrement);
-
-    return (
-        <div>
-            <h3>Ladder View</h3>
-            <label>
-                Aggregation Increment:
-                <select
-                    value={aggregationIncrement}
-                    onChange={(e) => setAggregationIncrement(parseFloat(e.target.value))}
-                >
-                    <option value={0.01}>0.01</option>
-                    <option value={0.05}>0.05</option>
-                    <option value={0.10}>0.10</option>
-                    <option value={0.50}>0.50</option>
-                    <option value={1.00}>1.00</option>
-                </select>
-            </label>
-            {/* <div>
-                <h4>Bids</h4>
-                <ul>
-                    {aggregatedBids.map(({ price, size }) => (
-                        <li key={price}>
-                            {price}: {size}
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
-            {/* <div>
-                <h4>Asks</h4>
-                <ul>
-                    {aggregatedAsks.map(({ price, size }) => (
-                        <li key={price}>
-                            {price}: {size}
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
-        </div>
-    );
-};
-
-export default LadderView;
+// Have used memo here to avoid unnecessary rerenders
+export default React.memo(LadderView);

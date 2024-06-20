@@ -1,24 +1,25 @@
 import React from 'react';
+import BestPriceWidget from '../BestPriceWidget/BestPriceWidget';
+import { Box, Grid } from '@mui/material';
+import { TopOfBookProps } from '../../common/interfaces/TopOfBookProps';
 
-interface Order {
-    price: number;
-    size: number;
-}
-
-interface TopOfBookProps {
-    bids: Order[];
-    asks: Order[];
-}
-
-const TopOfBook: React.FC<TopOfBookProps> = ({ bids, asks }) => {
-    const bestBid = bids[0] || { price: 0, size: 0 };
-    const bestAsk = asks[0] || { price: 0, size: 0 };
+// Best Bid and ask boxes
+const TopOfBook: React.FC<TopOfBookProps> = (props: TopOfBookProps) => {
+    const bestBid = props.bids[0] || { price: 0, size: 0 };
+    const bestAsk = props.asks[0] || { price: 0, size: 0 };
 
     return (
         <div>
-            <h3>Top of Book</h3>
-            <p>Best Bid: {bestBid.price} ({bestBid.size})</p>
-            <p>Best Ask: {bestAsk.price} ({bestAsk.size})</p>
+            <Box sx={{ flexGrow: 1, padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid item>
+                        <BestPriceWidget type={'Bid'} price={bestBid.price} quantity={bestBid.size} />
+                    </Grid>
+                    <Grid item>
+                        <BestPriceWidget type={'Ask'} price={bestAsk.price} quantity={bestAsk.size} />
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     );
 };
